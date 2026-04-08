@@ -1,8 +1,8 @@
 # QA Platform Java
 
-Multi-module QA automation platform aligned with the provided technical specification.
+Модульная QA-платформа автоматизации тестирования, реализованная по техническому заданию.
 
-## Modules
+## Модули
 - `test-orchestrator`
 - `api-tests`
 - `ui-tests`
@@ -12,24 +12,24 @@ Multi-module QA automation platform aligned with the provided technical specific
 - `reporting-service`
 - `observability-service`
 
-## Local run
-1. Start infra:
+## Локальный запуск
+1. Запуск инфраструктуры:
    - `docker compose -f infra/docker-compose.yml up -d`
-2. Smoke:
+2. Smoke-прогон:
    - `mvn test -Psmoke`
-3. Regression:
+3. Regression-прогон:
    - `mvn test -Pregression`
-4. E2E only:
+4. Только E2E:
    - `mvn test -Pe2e -pl ui-tests -Dui.e2e.enabled=true`
-5. Quality gate check:
+5. Проверка quality gate:
    - `python scripts/quality_gate.py --smoke-max-minutes 15 --regression-max-minutes 120 --flaky-max-rate 0.03`
 
-## Quality goals
+## Целевые показатели качества
 - Flaky rate <= 3%
 - Smoke <= 15 minutes
 - Regression <= 120 minutes
 
-## Delivery docs
+## Документы для сдачи
 - `docs/quickstart.md`
 - `docs/triage-and-flaky.md`
 - `docs/tz-compliance-matrix.md`
