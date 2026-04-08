@@ -1,0 +1,47 @@
+name: QA Platform CI
+
+on:
+  pull_request:
+  push:
+    branches: [ main, master ]
+  schedule:
+    - cron: "0 2 * * *"
+
+jobs:
+  pr-quality-checks:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Smoke checks
+        run: mvn -B -Psmoke test
+
+  merge-regression-contract:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Regression + contract
+        run: mvn -B -Pregression test
+
+  nightly-full:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Full nightly
+        run: mvn -B -Pregression test
+      - name: Performance baseline descriptor
+        run: mvn -B -pl performance-tests test

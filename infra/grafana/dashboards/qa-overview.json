@@ -1,0 +1,12 @@
+{
+  "title": "QA Platform Overview",
+  "timezone": "browser",
+  "panels": [
+    { "title": "Pass Rate", "type": "timeseries" },
+    { "title": "Flaky Rate", "type": "timeseries" },
+    { "title": "Suite Duration", "type": "timeseries" },
+    { "title": "Error Categories", "type": "piechart" }
+  ],
+  "schemaVersion": 39,
+  "version": 1
+}
