@@ -19,6 +19,13 @@ jobs:
           java-version: 21
       - name: Smoke checks
         run: mvn -B -Psmoke test
+      - name: Quality gate (PR)
+        run: python scripts/quality_gate.py --smoke-max-minutes 15 --regression-max-minutes 120 --flaky-max-rate 0.03
+      - name: Upload surefire reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-surefire-reports
+          path: "**/target/surefire-reports/*"
 
   merge-regression-contract:
     if: github.event_name == 'push'
@@ -31,6 +38,13 @@ jobs:
           java-version: 21
       - name: Regression + contract
         run: mvn -B -Pregression test
+      - name: Quality gate (merge)
+        run: python scripts/quality_gate.py --smoke-max-minutes 15 --regression-max-minutes 120 --flaky-max-rate 0.03
+      - name: Upload surefire reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: merge-surefire-reports
+          path: "**/target/surefire-reports/*"
 
   nightly-full:
     if: github.event_name == 'schedule'
@@ -45,3 +59,10 @@ jobs:
         run: mvn -B -Pregression test
       - name: Performance baseline descriptor
         run: mvn -B -pl performance-tests test
+      - name: Quality gate (nightly)
+        run: python scripts/quality_gate.py --smoke-max-minutes 15 --regression-max-minutes 120 --flaky-max-rate 0.03
+      - name: Upload surefire reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-surefire-reports
+          path: "**/target/surefire-reports/*"
